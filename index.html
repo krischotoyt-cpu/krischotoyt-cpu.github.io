@@ -15,20 +15,29 @@ body {
   align-items: center;
   font-family: 'Georgia', serif;
   overflow: hidden;
+  perspective: 1000px; /* за 3D ефект */
 }
 
 /* ✉️ Плик */
-.envelope {
+.envelope-container {
   position: relative;
   width: 80%;
   max-width: 350px;
   aspect-ratio: 1.5;
-  background: #f48fb1;
-  border-radius: 0 0 12px 12px;
   cursor: pointer;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
+.envelope {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f48fb1;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+/* Капак на плика */
 .flap {
   position: absolute;
   top: 0;
@@ -40,13 +49,10 @@ body {
   border-top: 60% solid #ec407a;
   transform-origin: top;
   transition: transform 1s ease;
+  z-index: 3;
 }
 
-.envelope.open .flap {
-  transform: rotateX(180deg);
-}
-
-/* 📄 Лист */
+/* Листът вътре в плика */
 .letter {
   position: absolute;
   bottom: 0;
@@ -58,39 +64,45 @@ body {
   padding: 20px;
   box-sizing: border-box;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(100%);
+  transform: translateY(80%) scale(0.9); /* скрит в плика */
   transition: transform 1.5s ease;
+  z-index: 2;
   overflow: hidden;
 }
 
-.envelope.open .letter {
-  transform: translateY(-5%);
+/* Когато плика е отворен */
+.envelope-container.open .flap {
+  transform: rotateX(180deg);
 }
 
-/* ✨ Текст */
+.envelope-container.open .letter {
+  transform: translateY(-5%) scale(1);
+}
+
+/* Текст и стих */
 .letter h2,
 .letter p,
 .verse {
   opacity: 0;
 }
 
-.envelope.open h2 {
+.envelope-container.open h2 {
   animation: fadeIn 1.5s forwards 0.5s;
 }
 
-.envelope.open p:nth-of-type(1) {
+.envelope-container.open p:nth-of-type(1) {
   animation: fadeIn 1.5s forwards 1.5s;
 }
 
-.envelope.open p:nth-of-type(2) {
+.envelope-container.open p:nth-of-type(2) {
   animation: fadeIn 1.5s forwards 2.5s;
 }
 
-.envelope.open p:nth-of-type(3) {
+.envelope-container.open p:nth-of-type(3) {
   animation: fadeIn 1.5s forwards 3.5s;
 }
 
-.envelope.open .verse {
+.envelope-container.open .verse {
   animation: fadeIn 2s forwards 4.5s;
 }
 
@@ -159,54 +171,40 @@ p {
 
 <body>
 
-<div class="envelope" onclick="openLetter()">
-  <div class="flap"></div>
-
-  <div class="letter">
-    <h2>Мила моя ❤️</h2>
-
-    <p>
-      Това писмо не е написано с мастило,<br>
-      а с благодарност и обич.
-    </p>
-
-    <p>
-      Ти си спокойствието ми,<br>
-      усмивката ми и топлината,<br>
-      която прави всичко по-смислено.
-    </p>
-
-    <p>
-      Радвам се, че те има.<br>
-      С обич — Крис 💌
-    </p>
-
-    <div class="verse">
-      „Любовта е дълготърпелива, милостива…<br>
-      всичко търпи, на всичко се надява.“<br>
-      — 1 Коринтяни 13:4–7
+<div class="envelope-container" onclick="openLetter()">
+  <div class="envelope">
+    <div class="flap"></div>
+    <div class="letter">
+      <h2>Мила моя ❤️</h2>
+      <p>Това писмо не е написано с мастило,<br>а с благодарност и обич.</p>
+      <p>Ти си спокойствието ми,<br>усмивката ми и топлината,<br>която прави всичко по-смислено.</p>
+      <p>Радвам се, че те има.<br>С обич — Крис 💌</p>
+      <div class="verse">
+        „Любовта е дълготърпелива, милостива…<br>
+        всичко търпи, на всичко се надява.“<br>
+        — 1 Коринтяни 13:4–7
+      </div>
     </div>
   </div>
 </div>
 
 <div class="hint">Натисни плика ✉️</div>
 
-<!-- 🌸 Падащи сърца и цветя -->
 <script>
-function openLetter() {
-  document.querySelector('.envelope').classList.add('open');
-  document.querySelector('.hint').style.display = 'none';
+function openLetter(){
+  document.querySelector('.envelope-container').classList.add('open');
+  document.querySelector('.hint').style.display='none';
 }
 
-/* Добавяне на падащи икони */
+/* Падащи сърца и цветя */
 const icons = ["❤️","🌸","💐","💖","🌷"];
 for(let i=0;i<35;i++){
   const el = document.createElement("div");
-  el.className = "fall";
-  el.innerText = icons[Math.floor(Math.random()*icons.length)];
-  el.style.left = Math.random()*100 + "vw";
-  el.style.fontSize = 16 + Math.random()*20 + "px";
-  el.style.animationDuration = 5 + Math.random()*5 + "s";
+  el.className="fall";
+  el.innerText=icons[Math.floor(Math.random()*icons.length)];
+  el.style.left=Math.random()*100 + "vw";
+  el.style.fontSize=16 + Math.random()*20 + "px";
+  el.style.animationDuration=5 + Math.random()*5 + "s";
   document.body.appendChild(el);
 }
 </script>
