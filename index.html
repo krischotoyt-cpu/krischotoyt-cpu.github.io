@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Little Something for You</title>
+    <title>Елегантно Послание</title>
     <style>
         :root {
-            --bg-color: #fdf2f2;
-            --env-color: #f4a7b9;
-            --env-dark: #e08fa0;
+            --bg-color: #fcfaf9;
+            --env-base: #f7e1e1; /* Нежна пудра */
+            --env-fold: #f2d4d4;
+            --text-main: #4a4a4a;
+            --gold: #c5a059;
             --letter-bg: #ffffff;
-            --text-color: #5d4037;
-            --accent-color: #d81b60;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,14 +23,16 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            font-family: 'Georgia', serif;
+            font-family: 'Optima', 'Didot', 'serif';
+            color: var(--text-main);
         }
 
-        /* --- Falling Elements --- */
-        .decoration {
+        /* --- Фини декорации --- */
+        .petal {
             position: absolute;
             top: -10%;
             pointer-events: none;
+            opacity: 0.6;
             animation: fall linear infinite;
         }
 
@@ -38,143 +40,159 @@
             to { transform: translateY(110vh) rotate(360deg); }
         }
 
-        /* --- Envelope Container --- */
-        .envelope-wrapper {
+        /* --- Плик --- */
+        .container {
             position: relative;
-            cursor: pointer;
-            width: 300px;
-            height: 200px;
-            transition: transform 0.3s;
-        }
-
-        .envelope-wrapper:hover {
-            transform: scale(1.05);
+            width: 320px;
+            height: 220px;
+            perspective: 1000px;
         }
 
         .envelope {
-            position: relative;
+            position: absolute;
             width: 100%;
             height: 100%;
-            background-color: var(--env-color);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-radius: 0 0 5px 5px;
+            background: var(--env-base);
+            border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.4s ease;
         }
 
-        /* The Flap */
+        .envelope:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Капак на плика */
         .flap {
             position: absolute;
             top: 0;
             width: 0;
             height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 100px solid var(--env-dark);
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid var(--env-fold);
             transform-origin: top;
-            transition: transform 0.6s ease-in-out;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 3;
         }
 
-        /* The Front Pockets */
-        .envelope::before {
+        /* Предна част (джобове) */
+        .envelope::after {
             content: '';
             position: absolute;
             z-index: 2;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-bottom: 100px solid var(--env-color);
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-bottom: 110px solid var(--env-base);
             bottom: 0;
         }
 
-        /* --- The Letter --- */
+        /* --- Писмо --- */
         .letter {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            width: 280px;
-            height: 180px;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
             background: var(--letter-bg);
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            transition: transform 0.8s ease-in-out, height 0.8s ease-in-out;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.03);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            justify-content: center;
+            text-align: center;
         }
 
-        .letter h2 { color: var(--accent-color); font-size: 1.2rem; opacity: 0; }
-        .letter p { font-size: 0.85rem; color: var(--text-color); line-height: 1.4; opacity: 0; }
-        .letter .verse { font-style: italic; font-weight: bold; margin-top: 10px; opacity: 0; }
+        .letter h2 { 
+            font-size: 1.4rem; 
+            font-weight: 300; 
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: var(--gold);
+            opacity: 0;
+        }
 
-        /* --- Animation States --- */
+        .letter p { 
+            font-size: 0.95rem; 
+            line-height: 1.6; 
+            margin-bottom: 10px;
+            opacity: 0;
+        }
+
+        .quote {
+            font-style: italic;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #888;
+            opacity: 0;
+        }
+
+        /* --- Активно състояние --- */
         .open .flap {
             transform: rotateX(180deg);
             z-index: 0;
         }
 
         .open .letter {
-            transform: translateY(-130px);
-            height: 320px;
+            transform: translateY(-160px) scale(1.05);
+            height: 380px;
             z-index: 4;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
-        /* Sequential Fade-in for Text */
-        .open .letter h2 { animation: fadeIn 0.5s forwards 0.8s; }
-        .open .letter p:nth-child(2) { animation: fadeIn 0.5s forwards 1.2s; }
-        .open .letter p:nth-child(3) { animation: fadeIn 0.5s forwards 1.6s; }
-        .open .letter .verse { animation: fadeIn 0.5s forwards 2.0s; }
+        /* Последователна анимация на текста */
+        .open .letter h2 { animation: slideUp 0.6s forwards 0.8s; }
+        .open .letter p { animation: slideUp 0.6s forwards 1.1s; }
+        .open .letter .quote { animation: slideUp 0.6s forwards 1.4s; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 400px) {
-            .envelope-wrapper { width: 260px; }
-            .flap { border-left-width: 130px; border-right-width: 130px; }
-            .envelope::before { border-left-width: 130px; border-right-width: 130px; }
-            .letter { width: 240px; }
+        @media (max-width: 480px) {
+            .container { width: 280px; }
+            .flap, .envelope::after { border-left-width: 140px; border-right-width: 140px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="envelope-wrapper" id="envelope">
+    <div class="container" id="card">
         <div class="flap"></div>
         <div class="envelope"></div>
         <div class="letter">
-            <h2>Dearest You,</h2>
-            <p>I was thinking of you today and wanted to send a little reminder of how much you mean to me.</p>
-            <p>Life is infinitely more beautiful with you by my side. Every moment we spend together is a gift I'll always cherish.</p>
-            <p class="verse">"I thank my God every time I remember you." <br>— Philippians 1:3</p>
+            <h2>ЗА ТЕБ</h2>
+            <p>Някои моменти нямат нужда от много думи. Просто исках да знаеш, че си в мислите ми днес.</p>
+            <div class="quote">
+                "Любовта не се състои в това да се гледате един друг, а в това да гледате в една и съща посока."<br>
+                — Антоан дьо Сент-Екзюпери
+            </div>
         </div>
     </div>
 
     <script>
-        const envelope = document.getElementById('envelope');
-        
-        // Toggle open state
-        envelope.addEventListener('click', () => {
-            envelope.classList.toggle('open');
-        });
+        const card = document.getElementById('card');
+        card.addEventListener('click', () => card.classList.toggle('open'));
 
-        // Generate falling hearts and flowers
-        function createDecoration() {
-            const symbols = ['❤️', '🌸', '✨', '💕', '🌷'];
+        function createPetal() {
+            const petals = ['🌸', '🍃', '✨'];
             const el = document.createElement('div');
-            el.className = 'decoration';
-            el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            el.className = 'petal';
+            el.innerText = petals[Math.floor(Math.random() * petals.length)];
             el.style.left = Math.random() * 100 + 'vw';
-            el.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            el.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            el.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            el.style.fontSize = (Math.random() * 5 + 12) + 'px';
             document.body.appendChild(el);
-
-            setTimeout(() => el.remove(), 5000);
+            setTimeout(() => el.remove(), 7000);
         }
 
-        setInterval(createDecoration, 400);
+        setInterval(createPetal, 600);
     </script>
 </body>
 </html>
