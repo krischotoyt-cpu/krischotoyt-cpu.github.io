@@ -3,200 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Интерактивни арт орхидеи 🌸🐝</title>
+<title>Интерактивно коте 😻</title>
 <style>
 body {
   margin:0;
   height:100vh;
-  background: linear-gradient(to top, #ffe6f0, #f0f8ff);
   display:flex;
   justify-content:center;
   align-items:center;
+  background: #ffe6f0;
   font-family: 'Georgia', serif;
   overflow:hidden;
-  flex-wrap:wrap;
 }
 
-.orchids {
-  display:flex;
-  gap: 40px;
-  flex-wrap:wrap;
-  justify-content:center;
+.cat-container {
   position: relative;
-}
-
-.orchid {
-  width: 120px;
-  height: 160px;
-  position: relative;
+  width: 200px;
+  height: 200px;
   cursor: pointer;
+}
+
+/* Надпис */
+.cat-message {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: bold;
+  color: #d81b60;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* SVG анимации */
+.cat-head {
+  width: 100%;
+  height: 100%;
   transition: transform 0.3s ease;
 }
 
-.orchid:hover {
-  transform: scale(1.05);
+.cat-head.petted {
+  transform: translateY(-5px) scale(1.05);
 }
 
-/* Закрито и отворено цвете */
-.closed, .open {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top:0; left:0;
-  transition: all 1s ease;
+/* Мустаци анимация */
+.whisker {
+  transition: transform 0.2s ease;
 }
 
-.closed { opacity:1; }
-.open { opacity:0; transform: scale(0.5); }
-
-/* Съобщение под цветето */
-.message {
-  position:absolute;
-  bottom:-30px;
-  width:100%;
-  text-align:center;
-  font-size:14px;
-  color:#d81b60;
-  opacity:0;
-  transition: opacity 0.8s ease;
+.cat-head.petted .whisker {
+  transform: rotate(5deg);
 }
 
-/* Пчелички */
-.bee {
-  position:absolute;
-  width:24px;
-  height:24px;
-  animation: fly linear infinite;
-}
-
-@keyframes fly {
-  0% { transform: translate(0,0) rotate(0deg);}
-  25% { transform: translate(50px,-30px) rotate(30deg);}
-  50% { transform: translate(-40px,-60px) rotate(-20deg);}
-  75% { transform: translate(30px,-90px) rotate(10deg);}
-  100% { transform: translate(0,0) rotate(0deg);}
-}
-
-/* Падащи частици */
-.particle {
-  position:absolute;
-  width:6px; height:6px;
-  background: #fff0;
-  border-radius:50%;
-  box-shadow: 0 0 6px #ffe6f0;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  to { transform: translateY(120vh); opacity:0; }
-}
-
-/* Responsive */
-@media (max-width:500px){
-  .orchid { width:80px; height:120px; }
-  .message { font-size:12px; }
+/* Надпис fade + bounce */
+.show-message {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
 }
 </style>
 </head>
 <body>
 
-<div class="orchids">
-  <div class="orchid" data-clicks="0">
-    <!-- SVG затворена орхидея -->
-    <div class="closed">
-      <svg viewBox="0 0 64 64" width="100%" height="100%">
-        <circle cx="32" cy="32" r="28" fill="#d16ba5"/>
-        <circle cx="32" cy="32" r="16" fill="#c777b9"/>
-      </svg>
-    </div>
-    <!-- SVG отворена орхидея -->
-    <div class="open">
-      <svg viewBox="0 0 64 64" width="100%" height="100%">
-        <circle cx="32" cy="32" r="28" fill="#f9a7c0"/>
-        <polygon points="32,10 42,32 32,54 22,32" fill="#f3c2d1"/>
-      </svg>
-    </div>
-    <div class="message">Обичам те ❤️</div>
-  </div>
+<div class="cat-container" onclick="petCat()">
+  <div class="cat-message" id="catMessage">Мяу 🐾 Обичкам те</div>
 
-  <div class="orchid" data-clicks="0">
-    <div class="closed">
-      <svg viewBox="0 0 64 64" width="100%" height="100%">
-        <circle cx="32" cy="32" r="28" fill="#d16ba5"/>
-        <circle cx="32" cy="32" r="16" fill="#c777b9"/>
-      </svg>
-    </div>
-    <div class="open">
-      <svg viewBox="0 0 64 64" width="100%" height="100%">
-        <circle cx="32" cy="32" r="28" fill="#f9a7c0"/>
-        <polygon points="32,10 42,32 32,54 22,32" fill="#f3c2d1"/>
-      </svg>
-    </div>
-    <div class="message">Ти си моето щастие 💖</div>
-  </div>
-
-  <div class="orchid" data-clicks="0">
-    <div class="closed">
-      <svg viewBox="0 0 64 64" width="100%" height="100%">
-        <circle cx="32" cy="32" r="28" fill="#d16ba5"/>
-        <circle cx="32" cy="32" r="16" fill="#c777b9"/>
-      </svg>
-    </div>
-    <div class="open">
-      <svg viewBox="0 0 64 64" width="100%" height="100%">
-        <circle cx="32" cy="32" r="28" fill="#f9a7c0"/>
-        <polygon points="32,10 42,32 32,54 22,32" fill="#f3c2d1"/>
-      </svg>
-    </div>
-    <div class="message">Завинаги с теб 💌</div>
-  </div>
+  <svg class="cat-head" viewBox="0 0 200 200">
+    <!-- Ушички -->
+    <polygon points="40,30 60,10 70,40" fill="#ffb6b9"/>
+    <polygon points="160,30 140,10 130,40" fill="#ffb6b9"/>
+    
+    <!-- Глава -->
+    <circle cx="100" cy="100" r="70" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
+    
+    <!-- Очички -->
+    <circle cx="75" cy="95" r="8" fill="#444"/>
+    <circle cx="125" cy="95" r="8" fill="#444"/>
+    
+    <!-- Мустаци -->
+    <line class="whisker" x1="35" y1="100" x2="0" y2="90" stroke="#444" stroke-width="2"/>
+    <line class="whisker" x1="35" y1="105" x2="0" y2="105" stroke="#444" stroke-width="2"/>
+    <line class="whisker" x1="35" y1="110" x2="0" y2="120" stroke="#444" stroke-width="2"/>
+    
+    <line class="whisker" x1="165" y1="100" x2="200" y2="90" stroke="#444" stroke-width="2"/>
+    <line class="whisker" x1="165" y1="105" x2="200" y2="105" stroke="#444" stroke-width="2"/>
+    <line class="whisker" x1="165" y1="110" x2="200" y2="120" stroke="#444" stroke-width="2"/>
+    
+    <!-- Нос -->
+    <polygon points="95,115 105,115 100,125" fill="#ff8aa3"/>
+  </svg>
 </div>
 
-<!-- Пчелички -->
 <script>
-const orchids = document.querySelectorAll('.orchid');
-
-orchids.forEach(orchid => {
-  orchid.addEventListener('click', () => {
-    let clicks = parseInt(orchid.dataset.clicks);
-    clicks++;
-    orchid.dataset.clicks = clicks;
-
-    if(clicks>=2){
-      orchid.querySelector('.closed').style.opacity=0;
-      const openFlower = orchid.querySelector('.open');
-      openFlower.style.opacity=1;
-      openFlower.style.transform='scale(1)';
-      orchid.querySelector('.message').style.opacity=1;
-    }
-  });
-});
-
-// Добавяне на пчелички
-const beePaths = [
-  {left:'10%', top:'10%'},
-  {left:'70%', top:'20%'},
-  {left:'50%', top:'40%'}
-];
-
-beePaths.forEach((pos,i)=>{
-  const bee = document.createElement('div');
-  bee.className='bee';
-  bee.innerText='🐝';
-  bee.style.left=pos.left;
-  bee.style.top=pos.top;
-  bee.style.animationDuration=(5+i*2)+'s';
-  document.body.appendChild(bee);
-});
-
-// Падащи частици
-for(let i=0;i<20;i++){
-  const p = document.createElement('div');
-  p.className='particle';
-  p.style.left=Math.random()*100+'vw';
-  p.style.animationDuration=(3 + Math.random()*5)+'s';
-  document.body.appendChild(p);
+function petCat(){
+  const catHead = document.querySelector('.cat-head');
+  const message = document.getElementById('catMessage');
+  
+  // анимация на главата и мустаците
+  catHead.classList.add('petted');
+  
+  // показваме надпис
+  message.classList.add('show-message');
+  
+  // махаме ефекта след 0.5 сек
+  setTimeout(()=>{
+    catHead.classList.remove('petted');
+  },500);
+  
+  // скриваме надпис след 2 секунди
+  setTimeout(()=>{
+    message.classList.remove('show-message');
+  },2000);
 }
 </script>
+
 </body>
 </html>
