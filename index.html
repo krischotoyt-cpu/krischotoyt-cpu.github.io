@@ -11,29 +11,42 @@ body {
   display:flex;
   justify-content:center;
   align-items:center;
-  background: #ffe6f0;
+  background: linear-gradient(135deg, #ffe6f0, #fce4ec);
   font-family: 'Georgia', serif;
   overflow:hidden;
 }
 
 .cat-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   cursor: pointer;
 }
 
 /* Надпис */
 .cat-message {
   position: absolute;
-  top: -40px;
+  top: -50px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(0);
   font-size: 18px;
   font-weight: bold;
   color: #d81b60;
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Плавен bounce ефект */
+.show-message {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+  animation: bounce 0.6s;
+}
+
+@keyframes bounce {
+  0% { transform: translateX(-50%) translateY(0);}
+  50% { transform: translateX(-50%) translateY(-15px);}
+  100% { transform: translateX(-50%) translateY(-10px);}
 }
 
 /* SVG анимации */
@@ -49,17 +62,31 @@ body {
 
 /* Мустаци анимация */
 .whisker {
-  transition: transform 0.2s ease;
+  transform-origin: center;
+  transition: transform 0.3s ease;
 }
 
-.cat-head.petted .whisker {
+.cat-head.petted .whisker-left {
+  transform: rotate(-5deg);
+}
+
+.cat-head.petted .whisker-right {
   transform: rotate(5deg);
 }
 
-/* Надпис fade + bounce */
-.show-message {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-10px);
+/* Очички */
+.eye {
+  transition: transform 0.3s ease;
+}
+
+.cat-head.petted .eye {
+  transform: scaleY(0.5);
+}
+
+/* Responsive */
+@media (max-width:500px){
+  .cat-container { width:150px; height:150px; }
+  .cat-message { font-size:16px; top:-40px; }
 }
 </style>
 </head>
@@ -70,27 +97,27 @@ body {
 
   <svg class="cat-head" viewBox="0 0 200 200">
     <!-- Ушички -->
-    <polygon points="40,30 60,10 70,40" fill="#ffb6b9"/>
-    <polygon points="160,30 140,10 130,40" fill="#ffb6b9"/>
+    <polygon points="45,35 65,10 75,45" fill="#ffb6b9"/>
+    <polygon points="155,35 135,10 125,45" fill="#ffb6b9"/>
     
     <!-- Глава -->
-    <circle cx="100" cy="100" r="70" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
+    <circle cx="100" cy="110" r="70" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
     
     <!-- Очички -->
-    <circle cx="75" cy="95" r="8" fill="#444"/>
-    <circle cx="125" cy="95" r="8" fill="#444"/>
+    <ellipse class="eye" cx="75" cy="105" rx="8" ry="10" fill="#444"/>
+    <ellipse class="eye" cx="125" cy="105" rx="8" ry="10" fill="#444"/>
     
     <!-- Мустаци -->
-    <line class="whisker" x1="35" y1="100" x2="0" y2="90" stroke="#444" stroke-width="2"/>
-    <line class="whisker" x1="35" y1="105" x2="0" y2="105" stroke="#444" stroke-width="2"/>
-    <line class="whisker" x1="35" y1="110" x2="0" y2="120" stroke="#444" stroke-width="2"/>
+    <line class="whisker whisker-left" x1="30" y1="110" x2="0" y2="100" stroke="#444" stroke-width="2"/>
+    <line class="whisker whisker-left" x1="30" y1="115" x2="0" y2="115" stroke="#444" stroke-width="2"/>
+    <line class="whisker whisker-left" x1="30" y1="120" x2="0" y2="130" stroke="#444" stroke-width="2"/>
     
-    <line class="whisker" x1="165" y1="100" x2="200" y2="90" stroke="#444" stroke-width="2"/>
-    <line class="whisker" x1="165" y1="105" x2="200" y2="105" stroke="#444" stroke-width="2"/>
-    <line class="whisker" x1="165" y1="110" x2="200" y2="120" stroke="#444" stroke-width="2"/>
+    <line class="whisker whisker-right" x1="170" y1="110" x2="200" y2="100" stroke="#444" stroke-width="2"/>
+    <line class="whisker whisker-right" x1="170" y1="115" x2="200" y2="115" stroke="#444" stroke-width="2"/>
+    <line class="whisker whisker-right" x1="170" y1="120" x2="200" y2="130" stroke="#444" stroke-width="2"/>
     
     <!-- Нос -->
-    <polygon points="95,115 105,115 100,125" fill="#ff8aa3"/>
+    <polygon points="95,125 105,125 100,135" fill="#ff8aa3"/>
   </svg>
 </div>
 
@@ -105,7 +132,7 @@ function petCat(){
   // показваме надпис
   message.classList.add('show-message');
   
-  // махаме ефекта след 0.5 сек
+  // махаме ефекта на главата след 0.5 сек
   setTimeout(()=>{
     catHead.classList.remove('petted');
   },500);
