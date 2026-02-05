@@ -1,213 +1,180 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Любовно писмо ❤️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Something for You</title>
+    <style>
+        :root {
+            --bg-color: #fdf2f2;
+            --env-color: #f4a7b9;
+            --env-dark: #e08fa0;
+            --letter-bg: #ffffff;
+            --text-color: #5d4037;
+            --accent-color: #d81b60;
+        }
 
-<style>
-body {
-  margin: 0;
-  height: 100vh;
-  background: radial-gradient(circle, #ffe6f0, #f8bbd0);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Georgia', serif;
-  overflow: hidden;
-  perspective: 1000px; /* за 3D ефект */
-}
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ✉️ Плик */
-.envelope-container {
-  position: relative;
-  width: 80%;
-  max-width: 350px;
-  aspect-ratio: 1.5;
-  cursor: pointer;
-}
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+        }
 
-.envelope {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: #f48fb1;
-  border-radius: 0 0 12px 12px;
-  overflow: hidden;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-}
+        /* --- Falling Elements --- */
+        .decoration {
+            position: absolute;
+            top: -10%;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
 
-/* Капак на плика */
-.flap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 50% solid transparent;
-  border-right: 50% solid transparent;
-  border-top: 60% solid #ec407a;
-  transform-origin: top;
-  transition: transform 1s ease;
-  z-index: 3;
-}
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
 
-/* Листът вътре в плика */
-.letter {
-  position: absolute;
-  bottom: 0;
-  left: 5%;
-  width: 90%;
-  height: 110%;
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-sizing: border-box;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transform: translateY(80%) scale(0.9); /* скрит в плика */
-  transition: transform 1.5s ease;
-  z-index: 2;
-  overflow: hidden;
-}
+        /* --- Envelope Container --- */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            width: 300px;
+            height: 200px;
+            transition: transform 0.3s;
+        }
 
-/* Когато плика е отворен */
-.envelope-container.open .flap {
-  transform: rotateX(180deg);
-}
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
 
-.envelope-container.open .letter {
-  transform: translateY(-5%) scale(1);
-}
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: var(--env-color);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-radius: 0 0 5px 5px;
+        }
 
-/* Текст и стих */
-.letter h2,
-.letter p,
-.verse {
-  opacity: 0;
-}
+        /* The Flap */
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid var(--env-dark);
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            z-index: 3;
+        }
 
-.envelope-container.open h2 {
-  animation: fadeIn 1.5s forwards 0.5s;
-}
+        /* The Front Pockets */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            z-index: 2;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid var(--env-color);
+            bottom: 0;
+        }
 
-.envelope-container.open p:nth-of-type(1) {
-  animation: fadeIn 1.5s forwards 1.5s;
-}
+        /* --- The Letter --- */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: var(--letter-bg);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            transition: transform 0.8s ease-in-out, height 0.8s ease-in-out;
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.envelope-container.open p:nth-of-type(2) {
-  animation: fadeIn 1.5s forwards 2.5s;
-}
+        .letter h2 { color: var(--accent-color); font-size: 1.2rem; opacity: 0; }
+        .letter p { font-size: 0.85rem; color: var(--text-color); line-height: 1.4; opacity: 0; }
+        .letter .verse { font-style: italic; font-weight: bold; margin-top: 10px; opacity: 0; }
 
-.envelope-container.open p:nth-of-type(3) {
-  animation: fadeIn 1.5s forwards 3.5s;
-}
+        /* --- Animation States --- */
+        .open .flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
 
-.envelope-container.open .verse {
-  animation: fadeIn 2s forwards 4.5s;
-}
+        .open .letter {
+            transform: translateY(-130px);
+            height: 320px;
+            z-index: 4;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
 
-h2 {
-  text-align: center;
-  color: #d81b60;
-}
+        /* Sequential Fade-in for Text */
+        .open .letter h2 { animation: fadeIn 0.5s forwards 0.8s; }
+        .open .letter p:nth-child(2) { animation: fadeIn 0.5s forwards 1.2s; }
+        .open .letter p:nth-child(3) { animation: fadeIn 0.5s forwards 1.6s; }
+        .open .letter .verse { animation: fadeIn 0.5s forwards 2.0s; }
 
-p {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #444;
-  margin-top: 12px;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.verse {
-  margin-top: 14px;
-  font-size: 12px;
-  font-style: italic;
-  color: #6a1b9a;
-  border-top: 1px dashed #ddd;
-  padding-top: 8px;
-}
-
-/* 💕 Анимации */
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-/* 🌸 Падащи сърца */
-.fall {
-  position: absolute;
-  top: -40px;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(120vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* Подсказка */
-.hint {
-  position: absolute;
-  bottom: 20px;
-  font-size: 14px;
-  color: #6a1b9a;
-  opacity: 0.8;
-  text-align: center;
-  width: 100%;
-}
-
-/* Responsive текст */
-@media (max-width: 480px){
-  p, .verse {
-    font-size: 13px;
-  }
-  h2 {
-    font-size: 18px;
-  }
-}
-</style>
+        @media (max-width: 400px) {
+            .envelope-wrapper { width: 260px; }
+            .flap { border-left-width: 130px; border-right-width: 130px; }
+            .envelope::before { border-left-width: 130px; border-right-width: 130px; }
+            .letter { width: 240px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="envelope-container" onclick="openLetter()">
-  <div class="envelope">
-    <div class="flap"></div>
-    <div class="letter">
-      <h2>Мила моя ❤️</h2>
-      <p>Това писмо не е написано с мастило,<br>а с благодарност и обич.</p>
-      <p>Ти си спокойствието ми,<br>усмивката ми и топлината,<br>която прави всичко по-смислено.</p>
-      <p>Радвам се, че те има.<br>С обич — Крис 💌</p>
-      <div class="verse">
-        „Любовта е дълготърпелива, милостива…<br>
-        всичко търпи, на всичко се надява.“<br>
-        — 1 Коринтяни 13:4–7
-      </div>
+    <div class="envelope-wrapper" id="envelope">
+        <div class="flap"></div>
+        <div class="envelope"></div>
+        <div class="letter">
+            <h2>Dearest You,</h2>
+            <p>I was thinking of you today and wanted to send a little reminder of how much you mean to me.</p>
+            <p>Life is infinitely more beautiful with you by my side. Every moment we spend together is a gift I'll always cherish.</p>
+            <p class="verse">"I thank my God every time I remember you." <br>— Philippians 1:3</p>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="hint">Натисни плика ✉️</div>
+    <script>
+        const envelope = document.getElementById('envelope');
+        
+        // Toggle open state
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('open');
+        });
 
-<script>
-function openLetter(){
-  document.querySelector('.envelope-container').classList.add('open');
-  document.querySelector('.hint').style.display='none';
-}
+        // Generate falling hearts and flowers
+        function createDecoration() {
+            const symbols = ['❤️', '🌸', '✨', '💕', '🌷'];
+            const el = document.createElement('div');
+            el.className = 'decoration';
+            el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            el.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            document.body.appendChild(el);
 
-/* Падащи сърца и цветя */
-const icons = ["❤️","🌸","💐","💖","🌷"];
-for(let i=0;i<35;i++){
-  const el = document.createElement("div");
-  el.className="fall";
-  el.innerText=icons[Math.floor(Math.random()*icons.length)];
-  el.style.left=Math.random()*100 + "vw";
-  el.style.fontSize=16 + Math.random()*20 + "px";
-  el.style.animationDuration=5 + Math.random()*5 + "s";
-  document.body.appendChild(el);
-}
-</script>
+            setTimeout(() => el.remove(), 5000);
+        }
 
+        setInterval(createDecoration, 400);
+    </script>
 </body>
 </html>
