@@ -2,6 +2,7 @@
 <html lang="bg">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Любовно писмо ❤️</title>
 
 <style>
@@ -19,10 +20,11 @@ body {
 /* ✉️ Плик */
 .envelope {
   position: relative;
-  width: 320px;
-  height: 210px;
+  width: 80%;
+  max-width: 350px;
+  aspect-ratio: 1.5;
   background: #f48fb1;
-  border-radius: 0 0 14px 14px;
+  border-radius: 0 0 12px 12px;
   cursor: pointer;
   box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
@@ -33,11 +35,11 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-left: 160px solid transparent;
-  border-right: 160px solid transparent;
-  border-top: 110px solid #ec407a;
+  border-left: 50% solid transparent;
+  border-right: 50% solid transparent;
+  border-top: 60% solid #ec407a;
   transform-origin: top;
-  transition: transform 1.2s ease;
+  transition: transform 1s ease;
 }
 
 .envelope.open .flap {
@@ -47,21 +49,22 @@ body {
 /* 📄 Лист */
 .letter {
   position: absolute;
-  bottom: -260px;
-  left: 20px;
-  width: 280px;
-  height: 320px;
+  bottom: 0;
+  left: 5%;
+  width: 90%;
+  height: 110%;
   background: #fff;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  transition: bottom 2s ease;
+  transform: translateY(100%);
+  transition: transform 1.5s ease;
   overflow: hidden;
 }
 
 .envelope.open .letter {
-  bottom: 20px;
+  transform: translateY(-5%);
 }
 
 /* ✨ Текст */
@@ -72,23 +75,23 @@ body {
 }
 
 .envelope.open h2 {
-  animation: fadeIn 1.5s forwards 1.5s;
+  animation: fadeIn 1.5s forwards 0.5s;
 }
 
 .envelope.open p:nth-of-type(1) {
-  animation: fadeIn 1.5s forwards 2.5s;
+  animation: fadeIn 1.5s forwards 1.5s;
 }
 
 .envelope.open p:nth-of-type(2) {
-  animation: fadeIn 1.5s forwards 3.5s;
+  animation: fadeIn 1.5s forwards 2.5s;
 }
 
 .envelope.open p:nth-of-type(3) {
-  animation: fadeIn 1.5s forwards 4.5s;
+  animation: fadeIn 1.5s forwards 3.5s;
 }
 
 .envelope.open .verse {
-  animation: fadeIn 2s forwards 5.5s;
+  animation: fadeIn 2s forwards 4.5s;
 }
 
 h2 {
@@ -97,7 +100,7 @@ h2 {
 }
 
 p {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
   color: #444;
   margin-top: 12px;
@@ -105,7 +108,7 @@ p {
 
 .verse {
   margin-top: 14px;
-  font-size: 13px;
+  font-size: 12px;
   font-style: italic;
   color: #6a1b9a;
   border-top: 1px dashed #ddd;
@@ -131,13 +134,25 @@ p {
   }
 }
 
-/* 👇 Подсказка */
+/* Подсказка */
 .hint {
   position: absolute;
-  bottom: 30px;
+  bottom: 20px;
   font-size: 14px;
   color: #6a1b9a;
   opacity: 0.8;
+  text-align: center;
+  width: 100%;
+}
+
+/* Responsive текст */
+@media (max-width: 480px){
+  p, .verse {
+    font-size: 13px;
+  }
+  h2 {
+    font-size: 18px;
+  }
 }
 </style>
 </head>
@@ -167,36 +182,31 @@ p {
     </p>
 
     <div class="verse">
-      „Любовта е дълготърпелива, милостива…  
-      всичко търпи, на всичко се надява.“  
-      <br>— 1 Коринтяни 13:4–7
+      „Любовта е дълготърпелива, милостива…<br>
+      всичко търпи, на всичко се надява.“<br>
+      — 1 Коринтяни 13:4–7
     </div>
   </div>
 </div>
 
 <div class="hint">Натисни плика ✉️</div>
 
-<!-- 🎵 Музика -->
-<audio id="music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0f7e5a9f74.mp3" type="audio/mpeg">
-</audio>
-
+<!-- 🌸 Падащи сърца и цветя -->
 <script>
 function openLetter() {
   document.querySelector('.envelope').classList.add('open');
   document.querySelector('.hint').style.display = 'none';
-  document.getElementById('music').play();
 }
 
-/* 🌸 Сърчица и цветя */
+/* Добавяне на падащи икони */
 const icons = ["❤️","🌸","💐","💖","🌷"];
-for(let i=0;i<30;i++){
+for(let i=0;i<35;i++){
   const el = document.createElement("div");
   el.className = "fall";
   el.innerText = icons[Math.floor(Math.random()*icons.length)];
   el.style.left = Math.random()*100 + "vw";
   el.style.fontSize = 16 + Math.random()*20 + "px";
-  el.style.animationDuration = 6 + Math.random()*6 + "s";
+  el.style.animationDuration = 5 + Math.random()*5 + "s";
   document.body.appendChild(el);
 }
 </script>
