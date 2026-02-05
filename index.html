@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Интерактивно коте 😻</title>
+<title>Реалистично интерактивно коте 😻</title>
 <style>
 body {
   margin:0;
@@ -13,19 +13,19 @@ body {
   align-items:center;
   background: linear-gradient(135deg, #ffe6f0, #fce4ec);
   font-family: 'Georgia', serif;
-  overflow:hidden;
 }
 
 .cat-container {
   position: relative;
-  width: 250px;
-  height: 300px;
+  width: 300px;
+  height: 350px;
+  cursor: pointer;
 }
 
 /* Надпис */
 .cat-message {
   position: absolute;
-  top: -60px;
+  top: -70px;
   left: 50%;
   transform: translateX(-50%) translateY(0);
   font-size: 20px;
@@ -37,20 +37,20 @@ body {
 
 .show-message {
   opacity: 1;
-  transform: translateX(-50%) translateY(-10px);
+  transform: translateX(-50%) translateY(-15px);
   animation: bounce 0.6s;
 }
 
 @keyframes bounce {
   0% { transform: translateX(-50%) translateY(0);}
-  50% { transform: translateX(-50%) translateY(-15px);}
-  100% { transform: translateX(-50%) translateY(-10px);}
+  50% { transform: translateX(-50%) translateY(-20px);}
+  100% { transform: translateX(-50%) translateY(-15px);}
 }
 
 /* SVG анимации */
 .cat-head {
   width: 100%;
-  height: 120px;
+  height: 140px;
   transition: transform 0.3s ease;
 }
 
@@ -58,6 +58,7 @@ body {
   transform: translateY(-5px) scale(1.05);
 }
 
+/* Мустаци */
 .whisker {
   transform-origin: center;
   transition: transform 0.3s ease;
@@ -71,6 +72,7 @@ body {
   transform: rotate(5deg);
 }
 
+/* Очички */
 .eye {
   transition: transform 0.3s ease;
 }
@@ -79,10 +81,10 @@ body {
   transform: scaleY(0.5);
 }
 
-/* Тяло и лапи */
+/* Тяло */
 .cat-body {
   width: 100%;
-  height: 180px;
+  height: 210px;
   transform-origin: top center;
   transition: transform 0.5s ease;
 }
@@ -92,29 +94,26 @@ body {
 }
 
 /* Лапи */
-.front-leg {
+.front-leg, .back-leg {
   transition: transform 0.5s ease;
 }
 
 .cat-body.stretch .front-leg-left {
-  transform: translateX(-10px) rotate(-10deg);
+  transform: translateX(-15px) rotate(-15deg);
 }
-
 .cat-body.stretch .front-leg-right {
-  transform: translateX(10px) rotate(10deg);
+  transform: translateX(15px) rotate(15deg);
 }
-
 .cat-body.stretch .back-leg-left {
-  transform: translateX(-10px) rotate(10deg);
+  transform: translateX(-15px) rotate(15deg);
 }
-
 .cat-body.stretch .back-leg-right {
-  transform: translateX(10px) rotate(-10deg);
+  transform: translateX(15px) rotate(-15deg);
 }
 
 /* Responsive */
 @media (max-width:500px){
-  .cat-container { width:180px; height:220px; }
+  .cat-container { width:200px; height:250px; }
   .cat-message { font-size:16px; top:-50px; }
 }
 </style>
@@ -124,18 +123,18 @@ body {
 <div class="cat-container">
   <div class="cat-message" id="catMessage">Мяу 🐾 Обичкам те</div>
 
-  <!-- Клик върху главата -->
+  <!-- Глава -->
   <svg class="cat-head" viewBox="0 0 200 200" onclick="petHead()">
     <!-- Ушички -->
-    <polygon points="45,35 65,10 75,45" fill="#ffb6b9"/>
-    <polygon points="155,35 135,10 125,45" fill="#ffb6b9"/>
+    <path d="M45,35 Q60,5 75,45" fill="#ffb6b9"/>
+    <path d="M155,35 Q140,5 125,45" fill="#ffb6b9"/>
     
     <!-- Глава -->
-    <circle cx="100" cy="110" r="70" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
+    <ellipse cx="100" cy="110" rx="70" ry="60" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
     
     <!-- Очички -->
-    <ellipse class="eye" cx="75" cy="105" rx="8" ry="10" fill="#444"/>
-    <ellipse class="eye" cx="125" cy="105" rx="8" ry="10" fill="#444"/>
+    <ellipse class="eye" cx="75" cy="105" rx="10" ry="12" fill="#444"/>
+    <ellipse class="eye" cx="125" cy="105" rx="10" ry="12" fill="#444"/>
     
     <!-- Мустаци -->
     <line class="whisker whisker-left" x1="30" y1="110" x2="0" y2="100" stroke="#444" stroke-width="2"/>
@@ -150,14 +149,14 @@ body {
     <polygon points="95,125 105,125 100,135" fill="#ff8aa3"/>
   </svg>
 
-  <!-- Тяло с лапи -->
-  <svg class="cat-body" viewBox="0 0 200 180" onclick="stretchBody()">
-    <!-- Тяло -->
-    <ellipse cx="100" cy="90" rx="60" ry="80" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
+  <!-- Тяло -->
+  <svg class="cat-body" viewBox="0 0 200 210" onclick="stretchBody()">
+    <!-- Гръб и тяло -->
+    <path d="M40,20 Q100,180 160,20 Q150,150 50,150 Z" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
     
     <!-- Лапи -->
-    <line class="front-leg front-leg-left" x1="50" y1="150" x2="40" y2="180" stroke="#ff8aa3" stroke-width="6"/>
-    <line class="front-leg front-leg-right" x1="150" y1="150" x2="160" y2="180" stroke="#ff8aa3" stroke-width="6"/>
+    <line class="front-leg front-leg-left" x1="60" y1="150" x2="45" y2="190" stroke="#ff8aa3" stroke-width="6"/>
+    <line class="front-leg front-leg-right" x1="140" y1="150" x2="155" y2="190" stroke="#ff8aa3" stroke-width="6"/>
     <line class="back-leg back-leg-left" x1="70" y1="170" x2="60" y2="200" stroke="#ff8aa3" stroke-width="6"/>
     <line class="back-leg back-leg-right" x1="130" y1="170" x2="140" y2="200" stroke="#ff8aa3" stroke-width="6"/>
   </svg>
@@ -169,17 +168,14 @@ const catBody = document.querySelector('.cat-body');
 const message = document.getElementById('catMessage');
 
 function petHead(){
-  // Погалване на главата
   catHead.classList.add('petted');
   message.classList.add('show-message');
   
-  // Връщане на анимацията на главата
   setTimeout(()=> catHead.classList.remove('petted'), 500);
   setTimeout(()=> message.classList.remove('show-message'), 2000);
 }
 
 function stretchBody(){
-  // Натиск върху тялото → протяга се
   catBody.classList.add('stretch');
   setTimeout(()=> catBody.classList.remove('stretch'), 500);
 }
