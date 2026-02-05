@@ -18,25 +18,23 @@ body {
 
 .cat-container {
   position: relative;
-  width: 220px;
-  height: 220px;
-  cursor: pointer;
+  width: 250px;
+  height: 300px;
 }
 
 /* Надпис */
 .cat-message {
   position: absolute;
-  top: -50px;
+  top: -60px;
   left: 50%;
   transform: translateX(-50%) translateY(0);
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: #d81b60;
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-/* Плавен bounce ефект */
 .show-message {
   opacity: 1;
   transform: translateX(-50%) translateY(-10px);
@@ -52,7 +50,7 @@ body {
 /* SVG анимации */
 .cat-head {
   width: 100%;
-  height: 100%;
+  height: 120px;
   transition: transform 0.3s ease;
 }
 
@@ -60,7 +58,6 @@ body {
   transform: translateY(-5px) scale(1.05);
 }
 
-/* Мустаци анимация */
 .whisker {
   transform-origin: center;
   transition: transform 0.3s ease;
@@ -74,7 +71,6 @@ body {
   transform: rotate(5deg);
 }
 
-/* Очички */
 .eye {
   transition: transform 0.3s ease;
 }
@@ -83,19 +79,53 @@ body {
   transform: scaleY(0.5);
 }
 
+/* Тяло и лапи */
+.cat-body {
+  width: 100%;
+  height: 180px;
+  transform-origin: top center;
+  transition: transform 0.5s ease;
+}
+
+.cat-body.stretch {
+  transform: scaleY(1.2);
+}
+
+/* Лапи */
+.front-leg {
+  transition: transform 0.5s ease;
+}
+
+.cat-body.stretch .front-leg-left {
+  transform: translateX(-10px) rotate(-10deg);
+}
+
+.cat-body.stretch .front-leg-right {
+  transform: translateX(10px) rotate(10deg);
+}
+
+.cat-body.stretch .back-leg-left {
+  transform: translateX(-10px) rotate(10deg);
+}
+
+.cat-body.stretch .back-leg-right {
+  transform: translateX(10px) rotate(-10deg);
+}
+
 /* Responsive */
 @media (max-width:500px){
-  .cat-container { width:150px; height:150px; }
-  .cat-message { font-size:16px; top:-40px; }
+  .cat-container { width:180px; height:220px; }
+  .cat-message { font-size:16px; top:-50px; }
 }
 </style>
 </head>
 <body>
 
-<div class="cat-container" onclick="petCat()">
+<div class="cat-container">
   <div class="cat-message" id="catMessage">Мяу 🐾 Обичкам те</div>
 
-  <svg class="cat-head" viewBox="0 0 200 200">
+  <!-- Клик върху главата -->
+  <svg class="cat-head" viewBox="0 0 200 200" onclick="petHead()">
     <!-- Ушички -->
     <polygon points="45,35 65,10 75,45" fill="#ffb6b9"/>
     <polygon points="155,35 135,10 125,45" fill="#ffb6b9"/>
@@ -119,28 +149,39 @@ body {
     <!-- Нос -->
     <polygon points="95,125 105,125 100,135" fill="#ff8aa3"/>
   </svg>
+
+  <!-- Тяло с лапи -->
+  <svg class="cat-body" viewBox="0 0 200 180" onclick="stretchBody()">
+    <!-- Тяло -->
+    <ellipse cx="100" cy="90" rx="60" ry="80" fill="#ffd1dc" stroke="#ff8aa3" stroke-width="3"/>
+    
+    <!-- Лапи -->
+    <line class="front-leg front-leg-left" x1="50" y1="150" x2="40" y2="180" stroke="#ff8aa3" stroke-width="6"/>
+    <line class="front-leg front-leg-right" x1="150" y1="150" x2="160" y2="180" stroke="#ff8aa3" stroke-width="6"/>
+    <line class="back-leg back-leg-left" x1="70" y1="170" x2="60" y2="200" stroke="#ff8aa3" stroke-width="6"/>
+    <line class="back-leg back-leg-right" x1="130" y1="170" x2="140" y2="200" stroke="#ff8aa3" stroke-width="6"/>
+  </svg>
 </div>
 
 <script>
-function petCat(){
-  const catHead = document.querySelector('.cat-head');
-  const message = document.getElementById('catMessage');
-  
-  // анимация на главата и мустаците
+const catHead = document.querySelector('.cat-head');
+const catBody = document.querySelector('.cat-body');
+const message = document.getElementById('catMessage');
+
+function petHead(){
+  // Погалване на главата
   catHead.classList.add('petted');
-  
-  // показваме надпис
   message.classList.add('show-message');
   
-  // махаме ефекта на главата след 0.5 сек
-  setTimeout(()=>{
-    catHead.classList.remove('petted');
-  },500);
-  
-  // скриваме надпис след 2 секунди
-  setTimeout(()=>{
-    message.classList.remove('show-message');
-  },2000);
+  // Връщане на анимацията на главата
+  setTimeout(()=> catHead.classList.remove('petted'), 500);
+  setTimeout(()=> message.classList.remove('show-message'), 2000);
+}
+
+function stretchBody(){
+  // Натиск върху тялото → протяга се
+  catBody.classList.add('stretch');
+  setTimeout(()=> catBody.classList.remove('stretch'), 500);
 }
 </script>
 
