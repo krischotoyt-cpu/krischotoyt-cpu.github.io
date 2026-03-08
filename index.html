@@ -3,1065 +3,400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Интерактивно котенце</title>
+
+<title>За Ели 🌸</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+
+:root{
+--pink:#ff6f91;
+--glass:rgba(255,255,255,.08);
 }
 
-body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  font-family: 'Arial', sans-serif;
-  overflow: hidden;
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
 }
 
-.container {
-  position: relative;
-  width: 500px;
-  height: 500px;
+body{
+font-family:'Inter',sans-serif;
+background:#08090d;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+color:white;
 }
 
-.cat-area {
-  position: absolute;
-  top: 65%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 350px;
-  height: 350px;
+/* cinematic background */
+
+body::before{
+content:"";
+position:fixed;
+width:140%;
+height:140%;
+background:
+radial-gradient(circle at 20% 30%,#ff8fb1,transparent),
+radial-gradient(circle at 80% 60%,#ffc2d1,transparent),
+radial-gradient(circle at 50% 90%,#ffccd5,transparent);
+filter:blur(140px);
+opacity:.55;
 }
 
-/* Котето */
-.cat {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 220px;
-  height: 200px;
-  cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* canvas */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
 }
 
-/* Тяло */
-.body {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 160px;
-  height: 90px;
-  background: linear-gradient(to bottom, #b08f6e 0%, #9c7d5f 100%);
-  border-radius: 80px/45px;
-  box-shadow: 
-    inset 0 8px 15px rgba(0,0,0,0.1),
-    0 4px 10px rgba(0,0,0,0.15);
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 2;
+/* card */
+
+.card{
+width:min(92vw,420px);
+padding:34px;
+border-radius:22px;
+background:var(--glass);
+backdrop-filter:blur(24px);
+box-shadow:
+0 30px 60px rgba(0,0,0,.45),
+inset 0 0 40px rgba(255,255,255,.05);
+text-align:center;
 }
 
-.belly {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120px;
-  height: 60px;
-  background: linear-gradient(to bottom, #f0e6d8 0%, #e0c9b1 100%);
-  border-radius: 60px/30px;
-  transition: all 0.4s ease;
+/* title */
+
+h1{
+font-family:'Playfair Display',serif;
+font-size:32px;
+margin-bottom:8px;
 }
 
-/* Глава */
-.head {
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 110px;
-  height: 100px;
-  background: linear-gradient(to bottom, #b08f6e 0%, #9c7d5f 100%);
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 3;
+/* subtitle */
+
+.subtitle{
+opacity:.85;
+margin-bottom:22px;
+font-size:15px;
 }
 
-/* Уши */
-.ear {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 35px solid #8b7355;
-  top: -20px;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* button */
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+font-size:16px;
+font-weight:500;
+background:white;
+color:var(--pink);
+cursor:pointer;
+transition:.25s;
 }
 
-.ear.left { left: 15px; transform: rotate(-10deg); }
-.ear.right { right: 15px; transform: rotate(10deg); }
-
-.ear::after {
-  content: '';
-  position: absolute;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 25px solid #ffccbc;
-  top: 5px;
-  left: -13px;
+button:active{
+transform:scale(.95);
 }
 
-/* ОЧИ */
-.eye {
-  position: absolute;
-  top: 35px;
-  width: 22px;
-  height: 30px;
-  background: #4a235a;
-  border-radius: 50%;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* letter */
+
+#letter{
+margin-top:24px;
+font-size:18px;
+line-height:1.65;
+min-height:100px;
 }
 
-.eye.left { left: 20px; }
-.eye.right { right: 20px; }
+/* typing cursor */
 
-.pupil {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  background: #000000;
-  border-radius: 50%;
-  top: 8px;
-  left: 4px;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+.cursor{
+display:inline-block;
+width:2px;
+height:18px;
+background:white;
+margin-left:4px;
+animation:blink 1s infinite;
 }
 
-.eye-sparkle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: linear-gradient(135deg, #ffffff, #e0e0e0);
-  border-radius: 50%;
-  top: 6px;
-  left: 10px;
-  opacity: 0.9;
-  transition: all 0.3s ease;
+@keyframes blink{
+50%{opacity:0}
 }
 
-.eye-sparkle.small {
-  width: 3px;
-  height: 3px;
-  top: 12px;
-  left: 16px;
-  opacity: 0.6;
-}
-
-/* Нос */
-.nose {
-  position: absolute;
-  top: 65px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 18px;
-  height: 14px;
-  background: #ff8a80;
-  border-radius: 50%;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Мустаци */
-.whisker {
-  position: absolute;
-  background: #5d4037;
-  height: 1.5px;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.whisker.left { left: 0; }
-.whisker.right { right: 0; }
-
-.whisker-1 { top: 65px; width: 35px; }
-.whisker-2 { top: 70px; width: 32px; }
-.whisker-3 { top: 75px; width: 35px; }
-
-/* Уста */
-.mouth {
-  position: absolute;
-  top: 85px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2px;
-  height: 15px;
-  background: #5d4037;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* ЛАПИ - ФИКСИРАНИ ПОЗИЦИИ */
-.paw {
-  position: absolute;
-  width: 35px;
-  height: 22px;
-  background: linear-gradient(to bottom, #b08f6e 0%, #9c7d5f 100%);
-  border-radius: 17px;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  cursor: pointer;
-  z-index: 1;
-  /* ФИКСИРАНИ ПОЗИЦИИ - НЕ СЕ ИЗЧЕЗВАТ */
-  transform-origin: center bottom;
-}
-
-.paw:hover {
-  transform: translateY(-5px) scale(1.1);
-}
-
-/* Предни лапи */
-.paw.front.left { 
-  left: 40px; 
-  top: 120px;
-}
-
-.paw.front.right { 
-  right: 40px; 
-  top: 120px;
-}
-
-/* Задни лапи */
-.paw.back.left { 
-  left: 30px; 
-  top: 130px;
-}
-
-.paw.back.right { 
-  right: 30px; 
-  top: 130px;
-}
-
-/* Подушечки */
-.pad {
-  position: absolute;
-  width: 9px;
-  height: 7px;
-  background: #ffccbc;
-  border-radius: 50%;
-  bottom: 5px;
-  transition: all 0.3s ease;
-  transform-origin: center center;
-}
-
-.pad-1 { left: 6px; }
-.pad-2 { left: 13px; }
-.pad-3 { right: 6px; }
-.pad-4 { right: 13px; }
-
-/* ОПАШКА */
-.tail {
-  position: absolute;
-  width: 70px;
-  height: 18px;
-  background: linear-gradient(to bottom, #b08f6e 0%, #9c7d5f 100%);
-  border-radius: 9px;
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  cursor: pointer;
-  z-index: 1;
-}
-
-.tail {
-  right: 20px;
-  top: 110px;
-  transform: rotate(160deg);
-  transform-origin: left center;
-}
-
-.tail:hover {
-  transform: rotate(140deg);
-}
-
-/* АНИМАЦИИ */
-@keyframes breathe {
-  0%, 100% { 
-    transform: translate(-50%, -50%) scale(1); 
-  }
-  50% { 
-    transform: translate(-50%, -50%) scale(1.03); 
-  }
-}
-
-.body {
-  animation: breathe 4s infinite ease-in-out;
-}
-
-@keyframes blink {
-  0%, 85%, 100% { 
-    height: 30px; 
-    border-radius: 50%;
-  }
-  87%, 93% { 
-    height: 6px; 
-    border-radius: 50% 50% 30% 30%;
-  }
-}
-
-.eye {
-  animation: blink 6s infinite;
-}
-
-@keyframes tailMove {
-  0%, 100% { 
-    transform: rotate(160deg); 
-  }
-  33% { 
-    transform: rotate(155deg); 
-  }
-  66% { 
-    transform: rotate(165deg); 
-  }
-}
-
-.tail {
-  animation: tailMove 5s infinite ease-in-out;
-}
-
-@keyframes subtleFloat {
-  0%, 100% { 
-    transform: translate(-50%, -50%); 
-  }
-  50% { 
-    transform: translate(-50%, -52%); 
-  }
-}
-
-.cat {
-  animation: subtleFloat 8s infinite ease-in-out;
-}
-
-/* Интерактивни състояния */
-.head:hover {
-  transform: translate(-50%, -50%) scale(1.05) translateY(-2px);
-}
-
-.head.petted {
-  transform: translate(-50%, -50%) scale(1.08) translateY(-3px);
-  animation: headPurr 0.8s ease-in-out;
-}
-
-@keyframes headPurr {
-  0%, 100% { transform: translate(-50%, -50%) scale(1.08) translateY(-3px); }
-  25% { transform: translate(-50%, -50%) scale(1.08) translateY(-3px) translateX(-2px); }
-  75% { transform: translate(-50%, -50%) scale(1.08) translateY(-3px) translateX(2px); }
-}
-
-.eye.closed {
-  height: 6px !important;
-  animation: none;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.eye.happy {
-  height: 20px;
-  border-radius: 20px 20px 10px 10px;
-  background: #6c3483;
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.nose.booped {
-  transform: translateX(-50%) scale(1.4);
-  animation: noseBoop 0.5s ease;
-}
-
-@keyframes noseBoop {
-  0% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.6); }
-  100% { transform: translateX(-50%) scale(1.4); }
-}
-
-.mouth.smiling {
-  width: 20px;
-  height: 2px;
-  border-radius: 1px;
-  background: #5d4037;
-  animation: smileGrow 0.6s ease;
-}
-
-@keyframes smileGrow {
-  0% { width: 2px; }
-  100% { width: 20px; }
-}
-
-/* НОВА АНИМАЦИЯ ЗА РАЗТЯГАНЕ - ФИКСИРАНА */
-.body.stretched {
-  animation: stretchBody 1.5s ease forwards;
-}
-
-@keyframes stretchBody {
-  0% {
-    transform: translate(-50%, -50%) scaleY(1);
-    height: 90px;
-  }
-  40% {
-    transform: translate(-50%, -55%) scaleY(1.15);
-    height: 100px;
-  }
-  70% {
-    transform: translate(-50%, -60%) scaleY(1.2);
-    height: 110px;
-  }
-  100% {
-    transform: translate(-50%, -50%) scaleY(1);
-    height: 90px;
-  }
-}
-
-/* АНИМАЦИИ ЗА ЛАПИ - ФИКСИРАНИ */
-.paw.stretching {
-  animation: stretchPaw 1.5s ease forwards;
-}
-
-@keyframes stretchPaw {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-  40% {
-    transform: translateY(-25px) rotate(-5deg);
-  }
-  70% {
-    transform: translateY(-30px) rotate(-8deg);
-  }
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-}
-
-/* Предни лапи - по-силно разтягане */
-.paw.front.stretching {
-  animation: stretchFrontPaw 1.5s ease forwards;
-}
-
-@keyframes stretchFrontPaw {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-  40% {
-    transform: translateY(-35px) rotate(-8deg);
-  }
-  70% {
-    transform: translateY(-40px) rotate(-10deg);
-  }
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-}
-
-/* Задни лапи - по-слабо разтягане */
-.paw.back.stretching {
-  animation: stretchBackPaw 1.5s ease forwards;
-}
-
-@keyframes stretchBackPaw {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-  40% {
-    transform: translateY(-20px) rotate(5deg);
-  }
-  70% {
-    transform: translateY(-25px) rotate(8deg);
-  }
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-}
-
-.tail.wagging {
-  animation: tailWag 0.8s infinite alternate ease-in-out;
-}
-
-@keyframes tailWag {
-  0% { transform: rotate(140deg); }
-  100% { transform: rotate(180deg); }
-}
-
-.ear.twitch {
-  animation: earTwitch 0.4s ease;
-}
-
-@keyframes earTwitch {
-  0%, 100% { transform: rotate(0); }
-  33% { transform: rotate(12deg); }
-  66% { transform: rotate(-8deg); }
-}
-
-/* СЪОБЩЕНИЯ - НАЙ-ГОРЕ НА СТРАНИЦАТА */
-.message-box {
-  position: fixed;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background: rgba(255, 255, 255, 0.98);
-  padding: 20px 35px;
-  border-radius: 35px;
-  font-size: 22px;
-  color: #5d4037;
-  text-align: center;
-  min-width: 300px;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.2);
-  border: 3px solid #ffccbc;
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  pointer-events: none;
-  z-index: 1000;
-  font-weight: bold;
-}
-
-.message-box.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.message-box span {
-  display: block;
-  margin-top: 10px;
-  font-size: 18px;
-  color: #8b7355;
-  font-style: italic;
-  font-weight: normal;
-}
-
-/* Responsive */
-@media (max-width: 550px) {
-  .container {
-    width: 350px;
-    height: 450px;
-  }
-  
-  .cat-area {
-    width: 280px;
-    height: 280px;
-    top: 70%;
-  }
-  
-  .cat {
-    width: 180px;
-    height: 160px;
-  }
-  
-  .message-box {
-    top: 10px;
-    font-size: 20px;
-    padding: 15px 25px;
-    min-width: 260px;
-    border-radius: 30px;
-  }
-  
-  .message-box span {
-    font-size: 16px;
-    margin-top: 8px;
-  }
-  
-  .tail {
-    right: 15px;
-    top: 95px;
-  }
-  
-  .paw.front.left { left: 35px; top: 100px; }
-  .paw.front.right { right: 35px; top: 100px; }
-  .paw.back.left { left: 25px; top: 110px; }
-  .paw.back.right { right: 25px; top: 110px; }
-}
 </style>
 </head>
+
 <body>
 
-<!-- Съобщение НАЙ-ГОРЕ НА СТРАНИЦАТА -->
-<div class="message-box" id="messageBox">
-  Котенце 🐱
-  <span>Кликни върху мен</span>
-</div>
+<canvas id="canvas"></canvas>
 
-<div class="container">
-  <div class="cat-area">
-    <!-- Котето ПО-НИСКО -->
-    <div class="cat">
-      <!-- ОПАШКА -->
-      <div class="tail" onclick="playWithTail()"></div>
-      
-      <!-- Тяло -->
-      <div class="body" onclick="stretchCat()">
-        <div class="belly"></div>
-      </div>
-      
-      <!-- ЛАПИ - ФИКСИРАНИ -->
-      <div class="paw front left" onclick="stretchSinglePaw(this)">
-        <div class="pad pad-1"></div>
-        <div class="pad pad-2"></div>
-        <div class="pad pad-3"></div>
-        <div class="pad pad-4"></div>
-      </div>
-      <div class="paw front right" onclick="stretchSinglePaw(this)">
-        <div class="pad pad-1"></div>
-        <div class="pad pad-2"></div>
-        <div class="pad pad-3"></div>
-        <div class="pad pad-4"></div>
-      </div>
-      <div class="paw back left" onclick="stretchSinglePaw(this)">
-        <div class="pad pad-1"></div>
-        <div class="pad pad-2"></div>
-        <div class="pad pad-3"></div>
-        <div class="pad pad-4"></div>
-      </div>
-      <div class="paw back right" onclick="stretchSinglePaw(this)">
-        <div class="pad pad-1"></div>
-        <div class="pad pad-2"></div>
-        <div class="pad pad-3"></div>
-        <div class="pad pad-4"></div>
-      </div>
-      
-      <!-- Глава -->
-      <div class="head" onclick="petHead()">
-        <!-- Уши -->
-        <div class="ear left" onclick="twitchEar(this)"></div>
-        <div class="ear right" onclick="twitchEar(this)"></div>
-        
-        <!-- ОЧИ -->
-        <div class="eye left" onclick="blinkEyes()">
-          <div class="pupil"></div>
-          <div class="eye-sparkle"></div>
-          <div class="eye-sparkle small"></div>
-        </div>
-        <div class="eye right" onclick="blinkEyes()">
-          <div class="pupil"></div>
-          <div class="eye-sparkle"></div>
-          <div class="eye-sparkle small"></div>
-        </div>
-        
-        <!-- Нос -->
-        <div class="nose" onclick="boopNose()"></div>
-        
-        <!-- Мустаци -->
-        <div class="whisker left whisker-1"></div>
-        <div class="whisker left whisker-2"></div>
-        <div class="whisker left whisker-3"></div>
-        <div class="whisker right whisker-1"></div>
-        <div class="whisker right whisker-2"></div>
-        <div class="whisker right whisker-3"></div>
-        
-        <!-- Уста -->
-        <div class="mouth"></div>
-      </div>
-    </div>
-  </div>
+<div class="card">
+
+<h1>Честит 8 март, любовче!</h1>
+
+<p class="subtitle">
+Имам нещо специално за теб
+</p>
+
+<button onclick="start()">
+Отвори изненадата
+</button>
+
+<div id="letter"></div>
+
 </div>
 
 <script>
-// Референции към елементи
-const head = document.querySelector('.head');
-const body = document.querySelector('.body');
-const tail = document.querySelector('.tail');
-const nose = document.querySelector('.nose');
-const mouth = document.querySelector('.mouth');
-const eyes = document.querySelectorAll('.eye');
-const ears = document.querySelectorAll('.ear');
-const paws = document.querySelectorAll('.paw');
-const messageBox = document.getElementById('messageBox');
 
-// Променливи за състояние
-let isStretching = false;
+/* TYPEWRITER */
 
-// Съобщения за различни действия
-const messages = {
-  head: [
-    {text: "Мърррр... 😊", sub: "Харесва ми!"},
-    {text: "Обичам да ме галят! 🥰", sub: "Продължавай!"},
-    {text: "Уфф, толкова е приятно! 😻", sub: "Мъррр..."}
-  ],
-  nose: [
-    {text: "Буп! 👃", sub: "Не ме бутай по носа!"},
-    {text: "Мяу! 🐱", sub: "Този нос е чувствителен"},
-    {text: "Спри! 😾", sub: "Не харесвам това"}
-  ],
-  paw: [
-    {text: "Лапичка! 🐾", sub: "Имаш розови подушечки"},
-    {text: "Разтягане! 💪", sub: "Това ми трябваше"},
-    {text: "Мек лапче! ✨", sub: "Много меки са"}
-  ],
-  tail: [
-    {text: "Опашка! 🌀", sub: "Любимата ми играчка"},
-    {text: "Виж как махам! 🐈", sub: "Хвани я, ако можеш!"},
-    {text: "Играчка! 🎮", sub: "Опашката ми е гъвкава"}
-  ],
-  eye: [
-    {text: "Миг! 👁️", sub: "Виждам те!"},
-    {text: "Кой там? 👀", sub: "Следим с очички"},
-    {text: "Котето вижда всичко! 🕶️", sub: "И в тъмното!"}
-  ],
-  body: [
-    {text: "Разтягааам се! 🙆", sub: "Цялото тяло"},
-    {text: "Ааах, това е! 😌", sub: "По дълго, моля"},
-    {text: "Йога за котки! 🧘", sub: "Професионално разтягане"}
-  ],
-  ear: [
-    {text: "Ушко! 👂", sub: "Чувам много добре"},
-    {text: "Тръпка! ⚡", sub: "Ушите ми са чувствителни"},
-    {text: "Мър-мяу! 🎵", sub: "Харесва ми това"}
-  ]
-};
+const message = `Прекрасна моя,
 
-// Променлива за текущо съобщение
-let currentMessageTimeout;
+С теб всичко е по-забавно и цветно.
+Красотата ти ме кара да се усмихвам без причина,
+а само да те зърна прави деня ми 100 пъти по-хубав.
 
-// Функция за показване на съобщение
-function showMessage(type) {
-  const msgList = messages[type];
-  const randomMsg = msgList[Math.floor(Math.random() * msgList.length)];
-  
-  messageBox.innerHTML = `${randomMsg.text}<span>${randomMsg.sub}</span>`;
-  messageBox.classList.add('show');
-  
-  // Скриване на съобщението след 3 секунди
-  if (currentMessageTimeout) {
-    clearTimeout(currentMessageTimeout);
-  }
-  
-  currentMessageTimeout = setTimeout(() => {
-    messageBox.classList.remove('show');
-  }, 3000);
+Благодаря ти, котенце.
+
+Обичам те ❤️`;
+
+let i = 0;
+
+function start(){
+typeWriter();
 }
 
-// Погаляване на главата
-function petHead() {
-  if (isStretching) return;
-  
-  head.classList.add('petted');
-  
-  // Мигане на очите от удоволствие
-  eyes.forEach(eye => {
-    eye.classList.add('happy');
-    eye.style.animation = 'none';
-    setTimeout(() => {
-      eye.classList.remove('happy');
-      eye.style.animation = 'blink 6s infinite';
-    }, 1200);
-  });
-  
-  // Усмивка
-  mouth.classList.add('smiling');
-  setTimeout(() => mouth.classList.remove('smiling'), 1800);
-  
-  // Плавно движение на мустаците
-  const whiskers = document.querySelectorAll('.whisker');
-  whiskers.forEach(w => {
-    w.style.transform = 'translateX(-2px)';
-    setTimeout(() => {
-      w.style.transform = 'translateX(2px)';
-      setTimeout(() => {
-        w.style.transform = '';
-      }, 300);
-    }, 150);
-  });
-  
-  showMessage('head');
-  
-  setTimeout(() => head.classList.remove('petted'), 1500);
+function typeWriter(){
+
+const el=document.getElementById("letter");
+
+if(i < message.length){
+
+el.innerHTML = message.substring(0,i) + '<span class="cursor"></span>';
+
+i++;
+
+setTimeout(typeWriter,35);
+
+}else{
+
+el.innerHTML = message;
+
 }
 
-// Бутане на носа
-function boopNose() {
-  if (isStretching) return;
-  
-  nose.classList.add('booped');
-  
-  // Затваряне на очите
-  eyes.forEach(eye => {
-    eye.classList.add('closed');
-    setTimeout(() => eye.classList.remove('closed'), 600);
-  });
-  
-  // Леко движение на главата назад
-  head.style.transform = 'translate(-50%, -50%) translateX(-5px)';
-  setTimeout(() => {
-    head.style.transform = 'translate(-50%, -50%)';
-  }, 300);
-  
-  showMessage('nose');
-  
-  setTimeout(() => nose.classList.remove('booped'), 600);
 }
 
-// Разтягане на една лапа - ФИКСИРАНА
-function stretchSinglePaw(paw) {
-  if (isStretching) return;
-  isStretching = true;
-  
-  // Определяме типа на лапата
-  const isFront = paw.classList.contains('front');
-  const isBack = paw.classList.contains('back');
-  
-  // Премахваме стари анимации първо
-  paw.style.animation = 'none';
-  void paw.offsetWidth; // Тригер за рефлоу
-  
-  // Добавяме правилната анимация
-  if (isFront) {
-    paw.classList.add('stretching', 'front');
-    paw.style.animation = 'stretchFrontPaw 1.5s ease forwards';
-  } else if (isBack) {
-    paw.classList.add('stretching', 'back');
-    paw.style.animation = 'stretchBackPaw 1.5s ease forwards';
-  } else {
-    paw.classList.add('stretching');
-    paw.style.animation = 'stretchPaw 1.5s ease forwards';
-  }
-  
-  // Подушечките се разтягат
-  const pads = paw.querySelectorAll('.pad');
-  pads.forEach(pad => {
-    pad.style.transform = 'scale(1.4)';
-    setTimeout(() => {
-      pad.style.transform = '';
-    }, 1500);
-  });
-  
-  showMessage('paw');
-  
-  // Спиране на анимацията и връщане в нормално състояние
-  setTimeout(() => {
-    paw.style.animation = '';
-    paw.classList.remove('stretching', 'front', 'back');
-    isStretching = false;
-  }, 1500);
+/* CANVAS SYSTEM */
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 }
 
-// Игра с опашката
-function playWithTail() {
-  if (isStretching) return;
-  
-  tail.classList.add('wagging');
-  
-  // Леко движение на тялото
-  body.style.transform = 'translate(-50%, -50%) rotate(2deg)';
-  setTimeout(() => {
-    body.style.transform = 'translate(-50%, -50%)';
-  }, 800);
-  
-  showMessage('tail');
-  
-  setTimeout(() => tail.classList.remove('wagging'), 2500);
+resize();
+window.addEventListener("resize",resize);
+
+/* FLOWERS */
+
+class Flower{
+
+constructor(){
+
+this.x=Math.random()*canvas.width;
+this.y=Math.random()*canvas.height;
+
+this.petals=6;
+
+this.radius=0;
+this.maxRadius=15+Math.random()*20;
+
+this.growSpeed=.15+Math.random()*.25;
+
+this.rotation=Math.random()*Math.PI;
+
 }
 
-// Разтягане на цялото тяло - ФИКСИРАНА
-function stretchCat() {
-  if (isStretching) return;
-  isStretching = true;
-  
-  // Премахваме стари анимации
-  body.style.animation = 'none';
-  void body.offsetWidth; // Тригер за рефлоу
-  
-  // Анимация за тялото
-  body.classList.add('stretched');
-  body.style.animation = 'stretchBody 1.5s ease forwards';
-  
-  // Анимации за всички лапи
-  paws.forEach(paw => {
-    const isFront = paw.classList.contains('front');
-    const isBack = paw.classList.contains('back');
-    
-    // Премахваме стари анимации
-    paw.style.animation = 'none';
-    void paw.offsetWidth;
-    
-    // Добавяме правилната анимация
-    if (isFront) {
-      paw.classList.add('stretching', 'front');
-      paw.style.animation = 'stretchFrontPaw 1.5s ease forwards';
-    } else if (isBack) {
-      paw.classList.add('stretching', 'back');
-      paw.style.animation = 'stretchBackPaw 1.5s ease forwards';
-    } else {
-      paw.classList.add('stretching');
-      paw.style.animation = 'stretchPaw 1.5s ease forwards';
-    }
-    
-    // Подушечките се разтягат
-    const pads = paw.querySelectorAll('.pad');
-    pads.forEach(pad => {
-      pad.style.transform = 'scale(1.5)';
-      setTimeout(() => {
-        pad.style.transform = '';
-      }, 1500);
-    });
-  });
-  
-  // Главата се накланя леко
-  head.style.transform = 'translate(-50%, -50%) rotate(-5deg)';
-  setTimeout(() => {
-    head.style.transform = 'translate(-50%, -50%)';
-  }, 1500);
-  
-  // Коремчето също се разтяга
-  const belly = document.querySelector('.belly');
-  belly.style.transform = 'translate(-50%, -50%) scaleY(1.2)';
-  setTimeout(() => {
-    belly.style.transform = 'translate(-50%, -50%)';
-  }, 1500);
-  
-  showMessage('body');
-  
-  // Спиране на всички анимации
-  setTimeout(() => {
-    body.style.animation = '';
-    body.classList.remove('stretched');
-    
-    paws.forEach(paw => {
-      paw.style.animation = '';
-      paw.classList.remove('stretching', 'front', 'back');
-    });
-    
-    isStretching = false;
-  }, 1500);
+update(){
+
+if(this.radius < this.maxRadius){
+this.radius+=this.growSpeed;
 }
 
-// Мигане на очите
-function blinkEyes() {
-  if (isStretching) return;
-  
-  eyes.forEach(eye => {
-    eye.classList.add('closed');
-    eye.style.animation = 'none';
-    setTimeout(() => {
-      eye.classList.remove('closed');
-      eye.style.animation = 'blink 6s infinite';
-    }, 400);
-  });
-  
-  // Леко движение на ушите
-  ears.forEach(ear => {
-    ear.style.transform = ear.classList.contains('left') ? 'rotate(-15deg)' : 'rotate(15deg)';
-    setTimeout(() => {
-      ear.style.transform = ear.classList.contains('left') ? 'rotate(-10deg)' : 'rotate(10deg)';
-    }, 200);
-  });
-  
-  showMessage('eye');
+this.draw();
+
 }
 
-// Дръпване на ухото
-function twitchEar(ear) {
-  if (isStretching) return;
-  
-  ear.classList.add('twitch');
-  
-  // Другото ухо също реагира
-  const otherEar = ear.classList.contains('left') ? 
-    document.querySelector('.ear.right') : 
-    document.querySelector('.ear.left');
-  
-  setTimeout(() => {
-    otherEar.style.transform = otherEar.classList.contains('left') ? 'rotate(-5deg)' : 'rotate(5deg)';
-    setTimeout(() => {
-      otherEar.style.transform = otherEar.classList.contains('left') ? 'rotate(-10deg)' : 'rotate(10deg)';
-    }, 200);
-  }, 100);
-  
-  showMessage('ear');
-  
-  setTimeout(() => ear.classList.remove('twitch'), 400);
+draw(){
+
+ctx.save();
+
+ctx.translate(this.x,this.y);
+ctx.rotate(this.rotation);
+
+for(let i=0;i<this.petals;i++){
+
+ctx.rotate(Math.PI*2/this.petals);
+
+ctx.beginPath();
+
+ctx.ellipse(
+0,
+this.radius/2,
+this.radius/3,
+this.radius,
+0,
+0,
+Math.PI*2
+);
+
+ctx.fillStyle="rgba(255,170,190,0.9)";
+ctx.fill();
+
 }
 
-// Следящи очи - следват мишката
-document.addEventListener('mousemove', (e) => {
-  const catRect = document.querySelector('.cat-area').getBoundingClientRect();
-  const catCenterX = catRect.left + catRect.width / 2;
-  const catCenterY = catRect.top + catRect.height / 2.5;
-  
-  const mouseX = e.clientX;
-  const mouseY = e.clientY;
-  
-  const deltaX = mouseX - catCenterX;
-  const deltaY = mouseY - catCenterY;
-  
-  // Плавно следене
-  const maxMove = 5;
-  const moveX = Math.max(-maxMove, Math.min(maxMove, deltaX / 40));
-  const moveY = Math.max(-maxMove, Math.min(maxMove, deltaY / 40));
-  
-  const pupils = document.querySelectorAll('.pupil');
-  pupils.forEach(pupil => {
-    const isLeft = pupil.parentElement.classList.contains('left');
-    pupil.style.left = `${isLeft ? 4 + moveX : 4 - moveX}px`;
-    pupil.style.top = `${8 + moveY}px`;
-  });
-  
-  // Отблясъците също се движат
-  const sparkles = document.querySelectorAll('.eye-sparkle');
-  sparkles.forEach(sparkle => {
-    const isSmall = sparkle.classList.contains('small');
-    sparkle.style.left = isSmall ? `${16 + moveX/4}px` : `${10 + moveX/3}px`;
-    sparkle.style.top = isSmall ? `${12 + moveY/4}px` : `${6 + moveY/3}px`;
-  });
+ctx.beginPath();
+ctx.arc(0,0,this.radius/4,0,Math.PI*2);
+
+ctx.fillStyle="#ffd166";
+ctx.fill();
+
+ctx.restore();
+
+}
+
+}
+
+/* PETALS */
+
+class Petal{
+
+constructor(){
+
+this.x=Math.random()*canvas.width;
+this.y=Math.random()*canvas.height;
+
+this.size=5+Math.random()*5;
+
+this.speedY=.4+Math.random()*.5;
+this.speedX=Math.random()*.4-.2;
+
+this.rotation=Math.random()*Math.PI;
+this.rotationSpeed=Math.random()*.02-.01;
+
+}
+
+update(){
+
+this.y+=this.speedY;
+this.x+=this.speedX;
+
+this.rotation+=this.rotationSpeed;
+
+if(this.y > canvas.height){
+this.y = -10;
+this.x = Math.random()*canvas.width;
+}
+
+}
+
+draw(){
+
+ctx.save();
+
+ctx.translate(this.x,this.y);
+ctx.rotate(this.rotation);
+
+ctx.beginPath();
+ctx.ellipse(0,0,this.size,this.size*.6,0,0,Math.PI*2);
+
+ctx.fillStyle="rgba(255,180,200,.9)";
+ctx.fill();
+
+ctx.restore();
+
+}
+
+}
+
+/* POLLEN */
+
+class Particle{
+
+constructor(){
+
+this.x=Math.random()*canvas.width;
+this.y=Math.random()*canvas.height;
+
+this.size=Math.random()*1.8;
+
+this.speedX=Math.random()*.3-.15;
+this.speedY=Math.random()*.3-.15;
+
+}
+
+update(){
+
+this.x+=this.speedX;
+this.y+=this.speedY;
+
+if(this.x>canvas.width) this.x=0;
+if(this.x<0) this.x=canvas.width;
+
+if(this.y>canvas.height) this.y=0;
+if(this.y<0) this.y=canvas.height;
+
+}
+
+draw(){
+
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+
+ctx.fillStyle="rgba(255,255,255,.7)";
+ctx.fill();
+
+}
+
+}
+
+let flowers=[];
+let petals=[];
+let particles=[];
+
+for(let i=0;i<16;i++) flowers.push(new Flower());
+for(let i=0;i<35;i++) petals.push(new Petal());
+for(let i=0;i<60;i++) particles.push(new Particle());
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach(p=>{
+p.update();
+p.draw();
 });
 
-// Рандом реакции - котето прави нещо само
-setInterval(() => {
-  if (isStretching) return;
-  
-  if (Math.random() > 0.7) {
-    const actions = [
-      () => {
-        // Мек миг
-        eyes.forEach(eye => {
-          eye.style.animation = 'none';
-          setTimeout(() => {
-            eye.style.height = '10px';
-            setTimeout(() => {
-              eye.style.height = '30px';
-              eye.style.animation = 'blink 6s infinite';
-            }, 200);
-          }, 50);
-        });
-      },
-      () => {
-        // Леко размахване на опашката
-        tail.style.animation = 'none';
-        setTimeout(() => {
-          tail.style.transform = 'rotate(150deg)';
-          setTimeout(() => {
-            tail.style.transform = 'rotate(160deg)';
-            tail.style.animation = 'tailMove 5s infinite ease-in-out';
-          }, 300);
-        }, 50);
-      },
-      () => {
-        // Леко ушко
-        const randomEar = ears[Math.floor(Math.random() * ears.length)];
-        randomEar.style.transform = randomEar.classList.contains('left') ? 
-          'rotate(-5deg)' : 'rotate(5deg)';
-        setTimeout(() => {
-          randomEar.style.transform = randomEar.classList.contains('left') ? 
-            'rotate(-10deg)' : 'rotate(10deg)';
-        }, 300);
-      }
-    ];
-    
-    actions[Math.floor(Math.random() * actions.length)]();
-  }
-}, 10000);
+flowers.forEach(f=>f.update());
 
-// Информация при зареждане
-setTimeout(() => {
-  showMessage('head');
-  // Леко размахване на опашката при зареждане
-  setTimeout(() => {
-    tail.classList.add('wagging');
-    setTimeout(() => tail.classList.remove('wagging'), 1500);
-  }, 500);
-}, 1000);
+petals.forEach(p=>{
+p.update();
+p.draw();
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
 </script>
 
 </body>
